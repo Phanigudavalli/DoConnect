@@ -9,5 +9,6 @@ public interface UserService {
     User login(String username, String password);
     User getUserById(Long id);
     void deactivateUser(Long id);
+    void saveUser(User user);
 }
 
