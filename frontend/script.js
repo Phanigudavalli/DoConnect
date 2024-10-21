@@ -1,3 +1,5 @@
+const BASE_URL = 'http://localhost:8081/http://localhost:8080/api/users';
+
 document.getElementById('admin-login-btn').addEventListener('click', function() {
     showLoginForm('Admin');
     setActiveButton('admin');
@@ -53,11 +55,28 @@ document.getElementById('form').addEventListener('submit', function(event) {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // Add your login logic here (e.g., API call)
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    document.getElementById('message').textContent = 'Login successful!'; // Simulated success
+    // API call for login
+    fetch(`${BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.text();
+        } else {
+            throw new Error('Login failed: Invalid username or password');
+        }
+    })
+    .then(message => {
+        document.getElementById('message').textContent = message; // Display success message
+        // Optionally redirect or perform additional actions
+    })
+    .catch(error => {
+        document.getElementById('message').textContent = error.message; // Display error message
+    });
 });
 
 document.getElementById('reg-form').addEventListener('submit', function(event) {
@@ -68,13 +87,34 @@ document.getElementById('reg-form').addEventListener('submit', function(event) {
     const email = document.getElementById('email').value;
     const regUsername = document.getElementById('reg-username').value;
     const regPassword = document.getElementById('reg-password').value;
+	
+	const user = {
+        username: regUsername,
+        password: regPassword,
+        active: true, // Set to true by default
+        roles: [] // If you want to assign roles, include them here
+    };
 
-    // Add your registration logic here (e.g., API call)
-    console.log('Registering Full Name:', fullName);
-    console.log('Registering Last Name:', lastName);
-    console.log('Registering Email:', email);
-    console.log('Registering Username:', regUsername);
-    console.log('Registering Password:', regPassword);
-
-    document.getElementById('reg-message').textContent = 'Registration successful!'; // Simulated success
+    // API call for registration
+    fetch(`${BASE_URL}/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+			body: JSON.stringify(user)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.text();
+        } else {
+            throw new Error('Registration failed');
+        }
+    })
+    .then(message => {
+        document.getElementById('reg-message').textContent = message; // Display success message
+        // Optionally clear the form or redirect
+    })
+    .catch(error => {
+        document.getElementById('reg-message').textContent = error.message; // Display error message
+    });
 });
