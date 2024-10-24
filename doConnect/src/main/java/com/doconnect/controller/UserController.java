@@ -1,5 +1,8 @@
 package com.doconnect.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@ import com.doconnect.model.User;
 import com.doconnect.service.UserService;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -22,12 +26,18 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody User user) {
         User loggedUser = userService.login(user.getUsername(), user.getPassword());
+        Map<String, Object> response = new HashMap<>();
+
         if (loggedUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            response.put("message", "Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-        return ResponseEntity.ok(loggedUser);
+
+        response.put("message", "Login successful");
+        response.put("user", loggedUser);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

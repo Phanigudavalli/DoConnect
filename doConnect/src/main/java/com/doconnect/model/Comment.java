@@ -5,17 +5,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-public class Answer {
+@Table(name = "\"comments\"")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
     @ManyToOne
-    private Question question; 
+    private Answer answer;
     @ManyToOne
     private User user;
+    
 	public Long getId() {
 		return id;
 	}
@@ -28,16 +31,16 @@ public class Answer {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Question getQuestion() {
-		return question;
+	public Answer getAnswer() {
+		return answer;
 	}
-	public void setQuestion(Question question) {
-		this.question = question;
+	public void setAnswer(Answer answer) {
+		this.answer = answer;
 	}
 	public User getUser() {
 		return user;
 	}
 	public void setUser(User user) {
 		this.user = user;
-	} 
+	}
 }
