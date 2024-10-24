@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8081/http://localhost:8080/api/users';
+const BASE_URL = 'http://localhost:8080/api/users';
 
 document.getElementById('admin-login-btn').addEventListener('click', function() {
     showLoginForm('Admin');
@@ -54,8 +54,11 @@ document.getElementById('form').addEventListener('submit', function(event) {
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    console.log(username);
+    console.log(password);
+    
+    console.log("trying to fetch data");
 
-    // API call for login
     fetch(`${BASE_URL}/login`, {
         method: 'POST',
         headers: {
@@ -71,12 +74,16 @@ document.getElementById('form').addEventListener('submit', function(event) {
         }
     })
     .then(message => {
-        document.getElementById('message').textContent = message; // Display success message
-        // Optionally redirect or perform additional actions
+		console.log("success");
+		console.log(message);
+       // document.getElementById('message').textContent = message;
     })
     .catch(error => {
-        document.getElementById('message').textContent = error.message; // Display error message
+		console.log(error);
+        document.getElementById('message').textContent = error.message;
     });
+    console.log("end");
+    
 });
 
 document.getElementById('reg-form').addEventListener('submit', function(event) {
